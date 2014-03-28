@@ -28,10 +28,20 @@ strmsg.push('baz')
 // buffer
 
 var bin = msg.toBuffer();
+var bufbin = bufmsg.toBuffer();
+var strbin = strmsg.toBuffer();
 
 suite('Message', function(){
   bench('decode', function(){
     new Message(bin);
+  })
+
+  bench('decode strings', function(){
+    new Message(strbin);
+  })
+
+  bench('decode buffers', function(){
+    new Message(bufbin);
   })
 
   bench('encode', function(){
