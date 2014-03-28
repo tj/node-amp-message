@@ -39,6 +39,7 @@ describe('Message(buffer)', function(){
     msg.push(undefined);
     msg = new Message(msg.toBuffer());
 
-    assert(null == msg.args[0]);
+    assert(1 == msg.args.length);
+    assert(null === msg.args[0]);
   })
 })
