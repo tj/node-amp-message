@@ -11,7 +11,7 @@ describe('Message()', function(){
 describe('Message(args)', function(){
   it('should add arguments', function(){
     var msg = new Message(['foo', 'bar', 'baz']);
-    msg.toBuffer().should.have.length(22);
+    msg.toBuffer().should.have.length(28);
   })
 })
 
