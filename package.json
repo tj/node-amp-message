@@ -1,6 +1,6 @@
 {
   "name": "amp-message",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repository": "visionmedia/node-amp-message",
   "description": "Higher level Message object for the AMP protocol",
   "keywords": [
