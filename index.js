@@ -119,6 +119,9 @@ function pack(arg) {
   // string
   if ('string' == typeof arg) return new Buffer('s:' + arg);
 
+  // undefined
+  if (arg === undefined) arg = null;
+
   // json
   return new Buffer('j:' + JSON.stringify(arg));
 }
