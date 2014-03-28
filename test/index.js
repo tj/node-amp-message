@@ -1,4 +1,6 @@
 
+var should = require('should');
+
 var Message = require('..');
 
 describe('Message()', function(){
@@ -29,5 +31,15 @@ describe('Message(buffer)', function(){
     msg.args[1].should.eql({ foo: 'bar' })
     msg.args[2].constructor.name.should.equal('Buffer')
     msg.args[2].toString().should.equal('bar')
+  })
+
+  it('should handle undefined', function() {
+    var msg = new Message;
+
+    msg.push(undefined);
+
+    msg = new Message(msg.toBuffer());
+
+    should.strictEqual(msg.args[0], undefined);
   })
 })

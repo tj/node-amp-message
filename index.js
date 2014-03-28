@@ -133,7 +133,15 @@ function pack(arg) {
 
 function unpack(arg) {
   // json
-  if (isJSON(arg)) return JSON.parse(arg.slice(2));
+  if (isJSON(arg)) {
+    arg = arg.slice(2).toString();
+
+    // handle undefined values
+    if ('undefined' == arg)
+      return undefined;
+
+    return JSON.parse(arg);
+  }
 
   // string
   if (isString(arg)) return arg.slice(2).toString();
