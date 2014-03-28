@@ -1,5 +1,5 @@
 
-var should = require('should');
+var assert = require('assert');
 
 var Message = require('..');
 
@@ -37,9 +37,8 @@ describe('Message(buffer)', function(){
     var msg = new Message;
 
     msg.push(undefined);
-
     msg = new Message(msg.toBuffer());
 
-    should.not.exist(msg.args[0]);
+    assert(null == msg.args[0]);
   })
 })
