@@ -77,10 +77,33 @@ Message.prototype.toBuffer = function(){
  */
 
 function decode(msg) {
-  var args = amp.decode(msg);
-  
-  for (var i = 0; i < args.length; i++) {
-    args[i] = unpack(args[i]);
+  // unpack meta
+  var meta = msg[0];
+  var version = meta >> 4;
+  var argv = meta & 0xf;
+  var args = new Array(argv);
+
+  var off = 1;
+
+  // unpack args
+  for (var i = 0; i < argv; i++) {
+    var len = msg.readUInt32BE(off) - 2;
+    off += 6;
+
+    // json
+    if (msg[off - 2] === 106 && msg[off - 1] === 58) {
+      args[i] = JSON.parse(msg.toString(null, off, off += len));
+      continue;
+    }
+
+    // string
+    if (msg[off - 2] === 115 && msg[off - 1] === 58) {
+      args[i] = msg.toString(null, off, off += len);
+      continue;
+    }
+
+    // blob
+    args[i] = msg.slice(off, off += len);
   }
 
   return args;
@@ -124,47 +147,4 @@ function pack(arg) {
 
   // json
   return new Buffer('j:' + JSON.stringify(arg));
-}
-
-/**
- * Unpack `arg`.
- *
- * @param {Buffer} arg
- * @return {Mixed}
- * @api private
- */
-
-function unpack(arg) {
-  // json
-  if (isJSON(arg)) return JSON.parse(arg.slice(2));
-
-  // string
-  if (isString(arg)) return arg.slice(2).toString();
- 
-  // blob
-  return arg;
-}
-
-/**
- * String argument.
- */
-
-function isString(arg) {
-  return 115 == arg[0] && 58 == arg[1];
-}
-
-/**
- * JSON argument.
- */
-
-function isJSON(arg) {
-  return 106 == arg[0] && 58 == arg[1];
-}
-
-/**
- * ID argument.
- */
-
-function isId(arg) {
-  return 105 == arg[0] && 58 == arg[1];
 }
