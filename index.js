@@ -78,7 +78,7 @@ Message.prototype.toBuffer = function(){
 
 function decode(msg) {
   var args = amp.decode(msg);
-  
+
   for (var i = 0; i < args.length; i++) {
     args[i] = unpack(args[i]);
   }
@@ -140,7 +140,7 @@ function unpack(arg) {
 
   // string
   if (isString(arg)) return arg.slice(2).toString();
- 
+
   // blob
   return arg;
 }
@@ -159,12 +159,4 @@ function isString(arg) {
 
 function isJSON(arg) {
   return 106 == arg[0] && 58 == arg[1];
-}
-
-/**
- * ID argument.
- */
-
-function isId(arg) {
-  return 105 == arg[0] && 58 == arg[1];
 }
