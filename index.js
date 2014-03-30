@@ -69,6 +69,12 @@ Message.prototype.toBuffer = function(){
 };
 
 /**
+ * AMP Protocol version.
+ */
+
+var version = 1;
+
+/**
  * Decode `msg` and unpack all args.
  *
  * @param {Buffer} msg
@@ -95,35 +101,73 @@ function decode(msg) {
  */
 
 function encode(args) {
-  var tmp = new Array(args.length);
+  var types = new Array(args);
+  var sizes = new Array(args);
+  var argc = args.length, copied = false;
+  var len = 1 + args.length * 6;
+  var off = 1;
 
-  for (var i = 0; i < args.length; i++) {
-    tmp[i] = pack(args[i]);
+  // data length
+  for (var i = argc - 1; i >= 0; i--) {
+    var arg = args[i];
+
+    // blob
+    if (Buffer.isBuffer(arg)) {
+      types[i] = 0;
+      len += (sizes[i] = arg.length);
+      continue;
+    }
+
+    // string
+    if (typeof arg === 'string') {
+      types[i] = 2;
+      len += (sizes[i] = Buffer.byteLength(arg));
+      continue;
+    }
+
+    if (!copied) {
+      copied = true;
+      // gotta copy for the stringify :(
+      args = args.slice();
+    }
+
+    // undefined
+    if (arg === undefined) arg = null;
+
+    // json
+    types[i] = 1;
+    len += (sizes[i] = (args[i] = JSON.stringify(arg)).length);
   }
 
-  return amp.encode(tmp);
-}
+  // buffer
+  var buf = new Buffer(len);
 
-/**
- * Pack `arg`.
- *
- * @param {Mixed} arg
- * @return {Buffer}
- * @api private
- */
+  // pack meta
+  buf[0] = version << 4 | argc;
 
-function pack(arg) {
-  // blob
-  if (Buffer.isBuffer(arg)) return arg;
+  // pack args
+  for (i = 0; i < argc; i++) {
+    var type = types[i], size = sizes[i], arg = args[i];
 
-  // string
-  if ('string' == typeof arg) return new Buffer('s:' + arg);
+    buf.writeUInt32BE(size + 2, off);
+    off += 4;
 
-  // undefined
-  if (arg === undefined) arg = null;
+    if (type === 0) {
+      // blob
+      buf[off++] = 98;
+      buf[off++] = 58;
+      arg.copy(buf, off);
+    } else {
+      // string or json
+      buf[off++] = 97 + type * 9; // s or j
+      buf[off++] = 58;
+      buf.write(arg, off);
+    }
 
-  // json
-  return new Buffer('j:' + JSON.stringify(arg));
+    off += size;
+  }
+
+  return buf;
 }
 
 /**
