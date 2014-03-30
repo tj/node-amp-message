@@ -78,7 +78,7 @@ Message.prototype.toBuffer = function(){
 
 function decode(msg) {
   var args = amp.decode(msg);
-  
+
   for (var i = 0; i < args.length; i++) {
     args[i] = unpack(args[i]);
   }
@@ -114,7 +114,13 @@ function encode(args) {
 
 function pack(arg) {
   // blob
-  if (Buffer.isBuffer(arg)) return arg;
+  if (Buffer.isBuffer(arg)) {
+    var buf = new Buffer(arg.length + 2);
+    buf[0] = 62;
+    buf[1] = 58;
+    arg.copy(buf, 2);
+    return buf;
+  }
 
   // string
   if ('string' == typeof arg) return new Buffer('s:' + arg);
@@ -140,9 +146,17 @@ function unpack(arg) {
 
   // string
   if (isString(arg)) return arg.slice(2).toString();
- 
+
   // blob
-  return arg;
+  return arg.slice(2);
+}
+
+/**
+ * Buffer argument.
+ */
+
+function isBuffer(arg) {
+  return 62 == arg[0] && 58 == arg[1];
 }
 
 /**
