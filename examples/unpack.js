@@ -1,7 +1,7 @@
 
 var Message = require('..');
 
-var msg = new Message(['foo', { foo: 'bar' }, new Buffer('foo')]);
+var msg = new Message(['foo', { foo: 'bar' }, Buffer.from('foo')]);
 
 msg = new Message(msg.toBuffer());
 

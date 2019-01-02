@@ -117,13 +117,13 @@ function pack(arg) {
   if (Buffer.isBuffer(arg)) return arg;
 
   // string
-  if ('string' == typeof arg) return new Buffer('s:' + arg);
+  if ('string' == typeof arg) return Buffer.from('s:' + arg);
 
   // undefined
   if (arg === undefined) arg = null;
 
   // json
-  return new Buffer('j:' + JSON.stringify(arg));
+  return Buffer.from('j:' + JSON.stringify(arg));
 }
 
 /**

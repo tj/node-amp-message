@@ -23,7 +23,7 @@ describe('Message(buffer)', function(){
 
     msg.push('foo');
     msg.push({ foo: 'bar' });
-    msg.push(new Buffer('bar'));
+    msg.push(Buffer.from('bar'));
 
     msg = new Message(msg.toBuffer());
 
