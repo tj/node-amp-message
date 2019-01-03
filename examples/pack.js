@@ -13,5 +13,5 @@ console.log(msg.toBuffer());
 msg.push({ foo: 'bar' });
 console.log(msg.toBuffer());
 
-msg.push(new Buffer('image data'));
+msg.push(Buffer.from('image data'));
 console.log(msg.toBuffer());

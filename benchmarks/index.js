@@ -7,15 +7,15 @@ var msg = new Message;
 
 msg.push('foo')
 msg.push({ foo: 'bar' })
-msg.push(new Buffer('something'))
+msg.push(Buffer.from('something'))
 
 // buffer message
 
 var bufmsg = new Message;
 
-bufmsg.push(new Buffer('foo'))
-bufmsg.push(new Buffer('bar'))
-bufmsg.push(new Buffer('baz'))
+bufmsg.push(Buffer.from('foo'))
+bufmsg.push(Buffer.from('bar'))
+bufmsg.push(Buffer.from('baz'))
 
 // string message
 

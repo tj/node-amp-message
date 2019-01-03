@@ -31,7 +31,7 @@ msg.push({ foo: 'bar' });
 console.log(msg.toBuffer());
 // => <Buffer 14 00 05 73 3a 66 6f 6f 00 05 73 3a 62 61 72 00 05 73 3a 62 61 7a 00 0f 6a 3a 7b 22 66 6f 6f 22 3a 22 62 61 72 22 7d>
 
-msg.push(new Buffer('image data'));
+msg.push(Buffer.from('image data'));
 console.log(msg.toBuffer());
 // => <Buffer 15 00 05 73 3a 66 6f 6f 00 05 73 3a 62 61 72 00 05 73 3a 62 61 7a 00 0f 6a 3a 7b 22 66 6f 6f 22 3a 22 62 61 72 22 7d 00 0a 69 6d 61 67 65 20 64 61 74 ... >
 ```
@@ -45,7 +45,7 @@ var msg = new Message;
 
 msg.push('foo')
 msg.push({ hello: 'world' })
-msg.push(new Buffer('hello'))
+msg.push(Buffer.from('hello'))
 
 var other = new Message(msg.toBuffer());
 
