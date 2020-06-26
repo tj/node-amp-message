@@ -119,6 +119,9 @@ function pack(arg) {
   // string
   if ('string' == typeof arg) return Buffer.from('s:' + arg);
 
+  // bigint
+  if ('bigint' == typeof arg) return Buffer.from('b:' + arg.toString());
+
   // undefined
   if (arg === undefined) arg = null;
 
@@ -141,6 +144,9 @@ function unpack(arg) {
   // string
   if (isString(arg)) return arg.slice(2).toString();
 
+  // bigint
+  if (isBigInt(arg)) return BigInt(arg.slice(2).toString());
+
   // blob
   return arg;
 }
@@ -159,4 +165,12 @@ function isString(arg) {
 
 function isJSON(arg) {
   return 106 == arg[0] && 58 == arg[1];
+}
+
+/**
+ * BigInt argument.
+ */
+
+function isBigInt(arg) {
+  return 98 == arg[0] && 58 == arg[1];
 }

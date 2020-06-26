@@ -24,6 +24,7 @@ describe('Message(buffer)', function(){
     msg.push('foo');
     msg.push({ foo: 'bar' });
     msg.push(Buffer.from('bar'));
+    msg.push(BigInt(5));
 
     msg = new Message(msg.toBuffer());
 
@@ -31,6 +32,8 @@ describe('Message(buffer)', function(){
     msg.args[1].should.eql({ foo: 'bar' })
     msg.args[2].constructor.name.should.equal('Buffer')
     msg.args[2].toString().should.equal('bar')
+    msg.args[3].constructor.name.should.equal('BigInt')
+    msg.args[3].should.eql(BigInt(5))
   })
 
   it('should handle undefined', function() {
