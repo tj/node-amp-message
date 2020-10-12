@@ -14,7 +14,7 @@ $ npm install amp-message
   Encoding a message:
 
 ```js
-var Message = require('amp-message');
+var Message = require('xcraft-amp-message');
 
 var msg = new Message;
 

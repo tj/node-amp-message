@@ -4,7 +4,7 @@
  */
 
 var fmt = require('util').format;
-var amp = require('amp');
+var amp = require('xcraft-amp');
 
 /**
  * Proxy methods.
