@@ -1,6 +1,6 @@
 {
   "name": "xcraft-amp-message",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "repository": "Xcraft-Inc/node-amp-message",
   "description": "Higher level Message object for the AMP protocol",
   "keywords": [
