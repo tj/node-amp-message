@@ -12,6 +12,7 @@
     "zeromq"
   ],
   "dependencies": {
+    "msgpackr": "^1.4.2",
     "xcraft-amp": "^0.4.0"
   },
   "files": [
