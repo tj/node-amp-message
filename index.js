@@ -5,6 +5,7 @@
 
 var fmt = require('util').format;
 var amp = require('xcraft-amp');
+const {pack, unpack} = require('msgpackr');
 
 /**
  * Proxy methods.
@@ -80,7 +81,7 @@ function decode(msg) {
   var args = amp.decode(msg);
 
   for (var i = 0; i < args.length; i++) {
-    args[i] = unpack(args[i]);
+    args[i] = _unpack(args[i]);
   }
 
   return args;
@@ -98,7 +99,7 @@ function encode(args) {
   var tmp = new Array(args.length);
 
   for (var i = 0; i < args.length; i++) {
-    tmp[i] = pack(args[i]);
+    tmp[i] = _pack(args[i]);
   }
 
   return amp.encode(tmp);
@@ -112,7 +113,7 @@ function encode(args) {
  * @api private
  */
 
-function pack(arg) {
+function _pack(arg) {
   // blob
   if (Buffer.isBuffer(arg)) return arg;
 
@@ -126,7 +127,7 @@ function pack(arg) {
   if (arg === undefined) arg = null;
 
   // json
-  return Buffer.from('j:' + JSON.stringify(arg));
+  return Buffer.concat([Buffer.from('j:'), pack(arg)]);
 }
 
 /**
@@ -137,9 +138,9 @@ function pack(arg) {
  * @api private
  */
 
-function unpack(arg) {
+function _unpack(arg) {
   // json
-  if (isJSON(arg)) return JSON.parse(arg.slice(2));
+  if (isJSON(arg)) return unpack(arg.slice(2));
 
   // string
   if (isString(arg)) return arg.slice(2).toString();
