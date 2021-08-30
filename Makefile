@@ -6,7 +6,7 @@ test:
 		--bail
 
 bench:
-	@./node_modules/.bin/matcha \
+	@./node_modules/.bin/_matcha \
 		benchmarks/index.js
 
 .PHONY: test bench
