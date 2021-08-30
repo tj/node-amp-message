@@ -6,14 +6,14 @@ var Message = require('..');
 describe('Message()', function(){
   it('should be an empty message', function(){
     var msg = new Message;
-    msg.toBuffer().should.have.length(1);
+    msg.toBuffer().should.have.length(5);
   })
 })
 
 describe('Message(args)', function(){
   it('should add arguments', function(){
     var msg = new Message(['foo', 'bar', 'baz']);
-    msg.toBuffer().should.have.length(28);
+    msg.toBuffer().should.have.length(32);
   })
 })
 
